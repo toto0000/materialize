@@ -18,8 +18,6 @@
       var placeholder = $('<div></div>').addClass('material-placeholder');
       var originalWidth = 0;
       var originalHeight = 0;
-      var ancestorsChanged;
-      var ancestor;
       origin.wrap(placeholder);
 
 
@@ -48,6 +46,7 @@
         overlayActive = true;
 
         // Set positioning for placeholder
+
         placeholder.css({
           width: placeholder[0].getBoundingClientRect().width,
           height: placeholder[0].getBoundingClientRect().height,
@@ -56,23 +55,7 @@
           left: 0
         });
 
-        // Find ancestor with overflow: hidden; and remove it
-        ancestorsChanged = undefined;
-        ancestor = placeholder[0].parentNode;
-        var count = 0;
-        while (ancestor !== null && !$(ancestor).is(document)) {
-          var curr = $(ancestor);
-          if (curr.css('overflow') !== 'visible') {
-            curr.css('overflow', 'visible');
-            if (ancestorsChanged === undefined) {
-              ancestorsChanged = curr;
-            }
-            else {
-              ancestorsChanged = ancestorsChanged.add(curr);
-            }
-          }
-          ancestor = ancestor.parentNode;
-        }
+
 
         // Set css on origin
         origin.css({position: 'absolute', 'z-index': 1000})
@@ -89,10 +72,10 @@
             returnToOriginal();
           });
           // Animate Overlay
-          // Put before in origin image to preserve z-index layering.
-          origin.before(overlay);
-          overlay.velocity({opacity: 1},
-                           {duration: inDuration, queue: false, easing: 'easeOutQuad'} );
+          $('body').append(overlay);
+          overlay.velocity({opacity: 1}, {duration: inDuration, queue: false, easing: 'easeOutQuad'}
+            );
+
 
         // Add and animate caption if it exists
         if (origin.data('caption') !== "") {
@@ -102,6 +85,8 @@
           $photo_caption.css({ "display": "inline" });
           $photo_caption.velocity({opacity: 1}, {duration: inDuration, queue: false, easing: 'easeOutQuad'});
         }
+
+
 
         // Resize Image
         var ratio = 0;
@@ -167,7 +152,7 @@
 
       // Return on scroll
       $(window).scroll(function() {
-        if (overlayActive) {
+        if (overlayActive ) {
           returnToOriginal();
         }
       });
@@ -250,11 +235,6 @@
               origin.removeClass('active');
               doneAnimating = true;
               $(this).remove();
-
-              // Remove overflow overrides on ancestors
-              if (ancestorsChanged) {
-                ancestorsChanged.css('overflow', '');
-              }
             }
           });
 

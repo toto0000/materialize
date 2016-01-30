@@ -1,8 +1,13 @@
-images/
-.sass-cache/
-.grunt/
 .DS_Store
 prepros.cfg
 Thumbs.db
-.projectile
+js/materialize.js
+test2.html
+test.html
+test2.html
+node_modules/
+.sass-cache/
+bin/jquery-2.1.1.min.js
+/.idea/
 **/*.log
+bower_components
